@@ -1,0 +1,112 @@
+How to setup and run Big Stitcher Spark Linux
+
+// fetch/clone/cd into the BigStitcher-Spark repo
+$ git reset --hard origin/main
+
+// install
+$ ./install 
+
+// run 
+$ ./detect-interestpoints -x /mnt/c/Users/marti/Documents/Allen/repos/Rhapso-old/SampleData/IP_TIFF_XML/dataset.xml -l beads -s 4.0 -t 0.0015 --minIntensity 0 --maxIntensity 255
+
+./detect-interestpoints -x /mnt/c/Users/marti/Documents/Allen/repos/Rhapso/SampleData/IP_TIFF_XML/dataset.xml -l beads -s 4.0 -t 0.0015 --overlappingOnly --storeIntensities --prefetch --minIntensity 0 --maxIntensity 255 -dsxy 4 -dsz 4  --type MAX --localization QUADRATIC
+
+./detect-interestpoints -x /mnt/c/Users/marti/Documents/Allen/repos/Rhapso/SampleData/IP_TIFF_XML/dataset.xml -l beads -s 1.8 -t 0.008 -dsxy 2 --minIntensity 0 --maxIntensity 255
+
+./match-interestpoints -x /mnt/c/Users/marti/Documents/Allen/repos/Rhapso/SampleData/IP_TIFF_XML/dataset.xml -l beads -m FAST_ROTATION --clearCorrespondences
+
+./solver -x /mnt/c/Users/marti/Documents/Allen/repos/Rhapso/SampleData/IP_TIFF_XML/dataset.xml -s STITCHING
+
+
+
+#echo "Starting Interest Point Detection"
+./detect-interestpoints -x /mnt/c/Users/marti/Documents/Allen/repos/Rhapso-old/SampleData/IP_TIFF_XML/dataset.xml -l beads -s 1.8 -t 0.008 -dsxy 2 --minIntensity 0 --maxIntensity 255
+
+- input
+- ouput: it creates n5 folder, edits the xml
+
+#echo "Starting Interest Point Matching"
+./match-interestpoints -x /mnt/c/Users/marti/Documents/Allen/repos/Rhapso/SampleData/IP_TIFF_XML/dataset.xml -l beads -m FAST_ROTATION --clearCorrespondences
+
+#echo "Starting Interest Point Solve"
+./solver -x /mnt/c/Users/marti/Documents/Allen/repos/Rhapso/SampleData/IP_TIFF_XML/dataset.xml -s IP -l beads
+
+#start affine fusion
+./affine-fusion -x /mnt/c/Users/marti/Documents/Allen/repos/Rhapso/SampleData/IP_TIFF_XML/dataset.xml --blockSize 256,256,256 -o /mnt/c/Users/marti/Documents/Allen/repos/Rhapso/SampleData/IP_TIFF_XML/dataset_fused.ome.ZARR -d /ch0/s0 -s ZARR --UINT16 --minIntensity=0 --maxIntensity=65535 --preserveAnisotropy
+
+- goal: open in bigdataviewer (fiji) 
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+# Starting Directories:
+
+'IP_TIFF_XML'            // we will make changes to this folder 
+'IP_TIFF_XML (original)' // this folder will remain unchanged and we will use it for comparison as to what changes
+
+./install 
+
+./detect-interestpoints -x "/mnt/c/Users/marti/Documents/Allen/Rhapso/Sample Data/IP_TIFF_XML/dataset.xml" -l beads -s 4.0 -t 0.0015 --minIntensity 0 --maxIntensity 255
+
+diff:
+diff IP_TIFF_XML/dataset.xml "IP_TIFF_XML (original)/dataset.xml"
+373,388c373
+<   <ViewInterestPoints>
+<     <ViewInterestPointsFile timepoint="18" setup="0" label="beads" params="DOG (Spark) s=4.0 t=0.0015 overlappingOnly=false min=false max=true downsampleXY=2 downsampleZ=1 minIntensity=0.0 maxIntensity=255.0">tpId_18_viewSetupId_0/beads</ViewInterestPointsFile>
+<     <ViewInterestPointsFile timepoint="18" setup="1" label="beads" params="DOG (Spark) s=4.0 t=0.0015 overlappingOnly=false min=false max=true downsampleXY=2 downsampleZ=1 minIntensity=0.0 maxIntensity=255.0">tpId_18_viewSetupId_1/beads</ViewInterestPointsFile>
+<     <ViewInterestPointsFile timepoint="18" setup="2" label="beads" params="DOG (Spark) s=4.0 t=0.0015 overlappingOnly=false min=false max=true downsampleXY=2 downsampleZ=1 minIntensity=0.0 maxIntensity=255.0">tpId_18_viewSetupId_2/beads</ViewInterestPointsFile>
+<     <ViewInterestPointsFile timepoint="18" setup="3" label="beads" params="DOG (Spark) s=4.0 t=0.0015 overlappingOnly=false min=false max=true downsampleXY=2 downsampleZ=1 minIntensity=0.0 maxIntensity=255.0">tpId_18_viewSetupId_3/beads</ViewInterestPointsFile>
+<     <ViewInterestPointsFile timepoint="18" setup="4" label="beads" params="DOG (Spark) s=4.0 t=0.0015 overlappingOnly=false min=false max=true downsampleXY=2 downsampleZ=1 minIntensity=0.0 maxIntensity=255.0">tpId_18_viewSetupId_4/beads</ViewInterestPointsFile>
+<     <ViewInterestPointsFile timepoint="18" setup="5" label="beads" params="DOG (Spark) s=4.0 t=0.0015 overlappingOnly=false min=false max=true downsampleXY=2 downsampleZ=1 minIntensity=0.0 maxIntensity=255.0">tpId_18_viewSetupId_5/beads</ViewInterestPointsFile>
+<     <ViewInterestPointsFile timepoint="18" setup="6" label="beads" params="DOG (Spark) s=4.0 t=0.0015 overlappingOnly=false min=false max=true downsampleXY=2 downsampleZ=1 minIntensity=0.0 maxIntensity=255.0">tpId_18_viewSetupId_6/beads</ViewInterestPointsFile>
+<     <ViewInterestPointsFile timepoint="30" setup="0" label="beads" params="DOG (Spark) s=4.0 t=0.0015 overlappingOnly=false min=false max=true downsampleXY=2 downsampleZ=1 minIntensity=0.0 maxIntensity=255.0">tpId_30_viewSetupId_0/beads</ViewInterestPointsFile>
+<     <ViewInterestPointsFile timepoint="30" setup="1" label="beads" params="DOG (Spark) s=4.0 t=0.0015 overlappingOnly=false min=false max=true downsampleXY=2 downsampleZ=1 minIntensity=0.0 maxIntensity=255.0">tpId_30_viewSetupId_1/beads</ViewInterestPointsFile>
+<     <ViewInterestPointsFile timepoint="30" setup="2" label="beads" params="DOG (Spark) s=4.0 t=0.0015 overlappingOnly=false min=false max=true downsampleXY=2 downsampleZ=1 minIntensity=0.0 maxIntensity=255.0">tpId_30_viewSetupId_2/beads</ViewInterestPointsFile>
+<     <ViewInterestPointsFile timepoint="30" setup="3" label="beads" params="DOG (Spark) s=4.0 t=0.0015 overlappingOnly=false min=false max=true downsampleXY=2 downsampleZ=1 minIntensity=0.0 maxIntensity=255.0">tpId_30_viewSetupId_3/beads</ViewInterestPointsFile>
+<     <ViewInterestPointsFile timepoint="30" setup="4" label="beads" params="DOG (Spark) s=4.0 t=0.0015 overlappingOnly=false min=false max=true downsampleXY=2 downsampleZ=1 minIntensity=0.0 maxIntensity=255.0">tpId_30_viewSetupId_4/beads</ViewInterestPointsFile>
+<     <ViewInterestPointsFile timepoint="30" setup="5" label="beads" params="DOG (Spark) s=4.0 t=0.0015 overlappingOnly=false min=false max=true downsampleXY=2 downsampleZ=1 minIntensity=0.0 maxIntensity=255.0">tpId_30_viewSetupId_5/beads</ViewInterestPointsFile>
+<     <ViewInterestPointsFile timepoint="30" setup="6" label="beads" params="DOG (Spark) s=4.0 t=0.0015 overlappingOnly=false min=false max=true downsampleXY=2 downsampleZ=1 minIntensity=0.0 maxIntensity=255.0">tpId_30_viewSetupId_6/beads</ViewInterestPointsFile>
+<   </ViewInterestPoints>
+---
+>   <ViewInterestPoints />
+Only in IP_TIFF_XML: dataset.xml~1
+Only in IP_TIFF_XML: interestpoints.n5
+
+# Create new folder 'IP_TIFF_XML_after_detecting' which is copy of after running the detect step 
+
+# Run Match command
+./match-interestpoints -x "/mnt/c/Users/marti/Documents/Allen/Rhapso/Sample Data/IP_TIFF_XML/dataset.xml" -l beads -m FAST_ROTATION --clearCorrespondences
+
+
+2
+
+./detect-interestpoints -x "/mnt/c/Users/marti/Documents/Allen/Rhapso/Sample Data/Stitching_TIFF_XML/dataset.xml" -l beads -s 4.0 -t 0.0015 --minIntensity 0 --maxIntensity 255
+
+./match-interestpoints -x "/mnt/c/Users/marti/Documents/Allen/Rhapso/Sample Data/Stitching_TIFF_XML/dataset.xml" -l beads -m FAST_ROTATION --clearCorrespondences
+
+./solver -x "/mnt/c/Users/marti/Documents/Allen/Rhapso/Sample Data/Stitching_TIFF_XML/dataset.xml" -s IP -l beads
+
+1.
+- Download 'IP_TIFF_XML' folder from BigStitcherSpark Readme under "Dataset for Interest Points:" / "As TIFF/XML (unaligned)" https://github.com/JaneliaSciComp/BigStitcher-Spark/blob/main/README.md#example-datasets
+- Clone BigStitcherSpark repo locally and CD into it
+- Run command to install BigStitcher-Spark: `./install`
+- Run command to resave dataset:.xml as new_dataset.xml: 
+    `./resave -x ~/IP_TIFF_XML/dataset.xml -xo ~/IP_TIFF_XML/new_dataset.xml`
+
+- Run command to detect interest points: 
+    `./detect-interestpoints -x ~/IP_TIFF_XML/new_dataset.xml -l beads -s 1.8 -t 0.008 -dsxy 2 --minIntensity 0 --maxIntensity 255`
+
+- Open Fiji program and navigate the GUI menues to Plugins -> BigDataViewer -> OpenXML/HDF5
+- Open 'new_dataset.xml' the file we saved
+- You should now be viewing the stitched images
+
+2. 
+- `./match-interestpoints -x ~/IP_TIFF_XML/new_dataset.xml -l beads -m FAST_ROTATION --clearCorrespondences`
+- `./solver -x ~/IP_TIFF_XML/new_dataset.xml -s IP -l beads`
+
+3. 
+`  ./resave -x ~/IP_N5_XML/dataset.xml -xo ~/IP_N5_XML/dataset.xml  `
+`  ./detect-interestpoints -x ~/IP_N5_XML/dataset.xml -l beads -s 1.8 -t 0.008 -dsxy 2 --minIntensity 0 --maxIntensity 255   `
+
+~/forSebastian/Camera_405_3_tiles_HCR_original.xml
+

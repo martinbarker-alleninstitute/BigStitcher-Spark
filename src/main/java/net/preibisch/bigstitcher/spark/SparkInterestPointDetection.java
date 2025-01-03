@@ -333,7 +333,9 @@ public class SparkInterestPointDetection extends AbstractSelectableViews impleme
 		if ( localSparkBindAddress )
 			conf.set("spark.driver.bindAddress", "127.0.0.1");
 
-		final JavaSparkContext sc = new JavaSparkContext(conf);
+		//final JavaSparkContext sc = new JavaSparkContext(conf);
+		final JavaSparkContext sc = new JavaSparkContext("local[*]", "SparkInterestPointDetection", conf);
+
 		sc.setLogLevel("ERROR");
 
 		final JavaRDD<Tuple3<int[], long[], long[][] >> rddJob = sc.parallelize( sparkProcess );

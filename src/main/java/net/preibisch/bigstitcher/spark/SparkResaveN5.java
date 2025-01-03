@@ -21,7 +21,6 @@
  */
 package net.preibisch.bigstitcher.spark;
 
-import java.io.File;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
@@ -192,11 +191,12 @@ public class SparkResaveN5 extends AbstractBasic implements Callable<Void>, Seri
 		System.out.println( "Number of compute blocks = " + gridS0.size() );
 
 		final SparkConf conf = new SparkConf().setAppName("SparkResaveN5");
+		final JavaSparkContext sc = new JavaSparkContext("local[*]", "SparkInterestPointDetection", conf);
 
-		if ( localSparkBindAddress )
-			conf.set("spark.driver.bindAddress", "127.0.0.1");
+		//if ( localSparkBindAddress )
+		//	conf.set("spark.driver.bindAddress", "127.0.0.1");
 
-		final JavaSparkContext sc = new JavaSparkContext(conf);
+		//final JavaSparkContext sc = new JavaSparkContext(conf);
 		sc.setLogLevel("ERROR");
 
 		//
